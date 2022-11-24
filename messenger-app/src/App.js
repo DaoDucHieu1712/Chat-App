@@ -2,6 +2,9 @@ import { AuthProvider } from "./contexts/auth-context";
 import { Routes, Route } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import Home from "./pages/Home";
+
 function App() {
   return (
     <div>
@@ -9,7 +12,8 @@ function App() {
         <Routes>
           <Route path="/sign-in" element={<SignIn></SignIn>}></Route>
           <Route path="/sign-up" element={<SignUp></SignUp>}></Route>
-          <Route path="/" element={<>Chat rooms</>}></Route>
+          <Route path="/profile" element={<Profile></Profile>}></Route>
+          <Route path="/" element={<Home></Home>}></Route>
           <Route path="*" element={<>Oop ! 404 </>}></Route>
         </Routes>
       </AuthProvider>
