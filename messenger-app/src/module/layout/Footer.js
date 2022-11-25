@@ -1,7 +1,7 @@
 import React from "react";
 
-const ChatBox = () => {
+const Footer = () => {
   return <div></div>;
 };
 
-export default ChatBox;
+export default Footer;
