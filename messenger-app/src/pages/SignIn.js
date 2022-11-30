@@ -19,6 +19,7 @@ const SignInPageStyles = styled.div`
   width: 1180px;
   height: 750px;
   margin: 100px auto;
+  background-color: white;
 
   .container {
     width: 100%;
