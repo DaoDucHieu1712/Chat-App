@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./ultis/constant";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Portal from "./portal/Portal";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -18,6 +18,7 @@ body {
     overflow-y: hidden;
     line-height: 1.5;
     font-family: "Epilogue", sans-serif;
+    list-style-type: none;
 }
 img,
 picture,
@@ -53,4 +54,21 @@ h6 {
     text-overflow: ellipsis;
     width: 150px;
     white-space: nowrap;
+}
+
+.zoom-enter .content {
+    opacity: 0;
+    transform: scale(0.5);
+}
+.zoom-enter-active .content {
+    opacity: 1;
+    transform: scale(1);
+}
+.zoom-exit .content {
+    opacity: 1;
+    transform: scale(0.5);
+}
+.zoom-exit-active .content {
+    opacity: 0;
+    transform: scale(0.5);
 }
