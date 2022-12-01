@@ -26,7 +26,7 @@ const ButtonLoginWithFB = () => {
           });
         }
         toast("Login successful !!!!");
-        navigate("/");
+        navigate("/box/q");
       })
       .catch((error) => {
         const errorCode = error.code;

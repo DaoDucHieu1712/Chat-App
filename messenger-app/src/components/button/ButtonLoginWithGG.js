@@ -26,7 +26,7 @@ const ButtonLoginWithGG = () => {
           });
         }
         toast("Login successful !!!!");
-        navigate("/");
+        navigate("/box/q");
       })
       .catch((error) => {
         // Handle Errors here.

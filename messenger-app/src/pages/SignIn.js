@@ -126,7 +126,7 @@ const SignIn = () => {
     await signInWithEmailAndPassword(auth, values.email, values.password)
       .then(() => {
         toast("Login successful !!!!");
-        navigate("/");
+        navigate("/box/q");
       })
       .catch(() => {
         toast.error("Email or password not correct !!!");

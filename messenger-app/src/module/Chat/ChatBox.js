@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import IconSearch from "../../components/icon/IconSearch";
-import EmojiPicker from "emoji-picker-react";
+
 import Message from "../../components/chat/Message";
+import ChatInput from "../../components/chat/ChatInput";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase-app/firebase-config";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
 
 const ChatBoxStyles = styled.div`
   width: 55%;
@@ -167,14 +180,52 @@ const IconInput = [
   },
 ];
 
-const ChatBox = () => {
-  const [isIcon, setIsIcon] = useState(false);
-  const [text, setText] = useState("");
+const MessageRef = collection(db, "Messages");
+const BoxRef = collection(db, "boxs");
 
-  const onEmojiClick = ({ emoji }, e) => {
-    setText(text + emoji);
-    setIsIcon(false);
-  };
+const ChatBox = () => {
+  const { boxId } = useParams();
+  const { userInfo } = useAuth();
+  const [box, setBox] = useState({});
+  const [isIcon, setIsIcon] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const mesRef = useRef(null);
+
+  useEffect(() => {
+    const unscribe = onSnapshot(MessageRef, (snapshot) => {
+      const getAllMessageWithBox = async () => {
+        const q = query(MessageRef, orderBy("createAt", "asc"));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        let result = [];
+        querySnapshot.forEach((doc) => {
+          result.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        const final = result.filter((item) => item.box_id === boxId);
+        console.log(final);
+        setMessages(final);
+      };
+      getAllMessageWithBox();
+    });
+
+    return unscribe;
+  }, [boxId, userInfo]);
+
+  useEffect(() => {
+    const docRefSingle = doc(db, "boxs", boxId);
+    onSnapshot(docRefSingle, (doc) => {
+      setBox({ id: doc.id, ...doc.data() });
+    });
+  }, [boxId, userInfo]);
+
+  useEffect(() => {
+    if (mesRef?.current) {
+      mesRef.current.scrollTop = mesRef.current.scrollHeight + 50;
+    }
+  }, [messages]);
 
   return (
     <ChatBoxStyles>
@@ -182,91 +233,38 @@ const ChatBox = () => {
         <div className="flex gap-x-3">
           <div>
             <img
-              src="https://images.unsplash.com/photo-1669469053221-093ec2c153f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MzV8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+              src={box.image_url}
               alt=""
               className="w-[50px] h-[50px] rounded-full"
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-semibold">New Chat Box</span>
-            <span className="text-gray-400">last send</span>
+            <span className="font-semibold">{box.boxName}</span>
+            <span className="text-gray-400">{box.contentBox}</span>
           </div>
         </div>
         <div className="chat-box__action flex items-center gap-x-5">
           {IconAction.map((item) => (
-            <span>{item.icon}</span>
+            <span key={item.icon}>{item.icon}</span>
           ))}
         </div>
       </div>
-      <div className="chat-box__main flex justify-between flex-col">
+      <div
+        className="chat-box__main flex justify-between flex-col"
+        ref={mesRef}
+      >
         <div className="chat-box__realtime flex flex-col gap-y-4">
-          <Message message="Hello" isUserCurrent></Message>
-          <Message message="Hi"></Message>
-          <Message message="What the fuck ?? " isUserCurrent></Message>
-        </div>
-      </div>
-      <div className="chat-box__send flex items-center gap-x-2">
-        <div className="flex flex-center gap-x-2">
-          {IconInput.map((item) => (
-            <span>{item.icon}</span>
+          {messages.map((item) => (
+            <Message
+              message={item.content}
+              isUserCurrent={userInfo.uid === item.user ? true : false}
+              photoURL={item.avatar}
+              displayName={item.author}
+            ></Message>
           ))}
         </div>
-        <div className="flex items-center gap-x-2  bg-gray-100 w-full p-2 rounded-2xl">
-          <IconSearch></IconSearch>
-          <input
-            type="text"
-            className="w-full bg-gray-100"
-            placeholder="Aa"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <div className="relative">
-            <div
-              className={`absolute -top-32 right-0 -translate-y-72 ${
-                isIcon ? "" : "hidden"
-              }`}
-            >
-              <EmojiPicker
-                width={300}
-                height={400}
-                onEmojiClick={onEmojiClick}
-              />
-            </div>
-            <span onClick={() => setIsIcon(!isIcon)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
-        <span className="p-2 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-            />
-          </svg>
-        </span>
       </div>
+      <ChatInput isIcon={isIcon} setIsIcon={setIsIcon}></ChatInput>
     </ChatBoxStyles>
   );
 };

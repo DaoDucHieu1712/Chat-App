@@ -160,7 +160,7 @@ const SideBar = () => {
   const handleSignOut = () => {
     signOut(auth);
     toast("Sign out successful !!!!!!!!!!!!!!! <3");
-    navigate("/sign-in");
+    navigate("/");
   };
   return (
     <SideBarStyles>
