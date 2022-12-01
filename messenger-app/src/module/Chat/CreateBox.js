@@ -17,6 +17,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/auth-context";
 import { useNavigate } from "react-router-dom";
+import UploadImage from "../../components/uploadImage/UploadImage";
+import slugify from "react-slugify";
+import { v4 as uuidv4 } from "uuid";
 
 const CreateBoxStyles = styled.div`
   background-color: #fff;
@@ -56,11 +59,15 @@ const CreateBox = ({ setOpenModal }) => {
     resolver: yupResolver(schema),
   });
   const onHandleSubmit = async (values) => {
+    console.log(values);
     addDoc(boxRef, {
       boxName: values.boxName,
+      box_key: uuidv4(),
+      slug: slugify(values.boxName, { lower: true }),
       contentBox: values.boxContent,
       adminBox: userInfo.uid,
       members: [userInfo.uid],
+      image_url: values.image_url,
       createAt: serverTimestamp(),
     })
       .then(() => {
@@ -107,6 +114,14 @@ const CreateBox = ({ setOpenModal }) => {
               {errors.boxContent.message}
             </p>
           )}
+        </Field>
+        <Field>
+          <UploadImage
+            setValue={setValue}
+            getValues={getValues}
+            control={control}
+            name="image_url"
+          ></UploadImage>
         </Field>
         <Field>
           <Button type="submit" buttonContent="Create"></Button>

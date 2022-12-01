@@ -137,7 +137,7 @@ const SignUp = () => {
     });
 
     toast.success("Register successfully !!!");
-    navigate("/");
+    navigate("/box/q");
   };
 
   return (

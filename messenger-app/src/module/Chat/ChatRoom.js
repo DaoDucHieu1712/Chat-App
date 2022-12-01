@@ -6,7 +6,6 @@ import CreateBox from "./CreateBox";
 import { useAuth } from "../../contexts/auth-context";
 import {
   collection,
-  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -53,9 +52,12 @@ const ChatRoom = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    onSnapshot(boxRef, (snapshot) => {
+    const unscribe = onSnapshot(boxRef, (snapshot) => {
       const getAllBoxOfUserCurrent = async () => {
-        const q = query(boxRef, where("members", "in", [[userInfo.uid]]));
+        const q = query(
+          boxRef,
+          where("members", "array-contains", userInfo.uid)
+        );
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot);
         let result = [];
@@ -69,7 +71,9 @@ const ChatRoom = () => {
       };
       getAllBoxOfUserCurrent();
     });
+    return unscribe;
   }, [userInfo]);
+
   console.log(rooms);
 
   return (
@@ -78,6 +82,22 @@ const ChatRoom = () => {
         <div className="chat-room__heading flex justify-between items-center">
           <h1 className="text-xl font-semibold">Chat</h1>
           <div className="flex items-center gap-x-2">
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                />
+              </svg>
+            </span>
             <span onClick={() => setOpenModal(true)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,8 +152,12 @@ const ChatRoom = () => {
       <div className="chat-room__list flex flex-col gap-y-2">
         {rooms.map((item) => (
           <GroupChat
+            key={item.box_key}
             BoxName={item.boxName}
             ContentBox={item.ContentBox}
+            image={item.image_url}
+            slug={item.slug}
+            box_id={item.id}
           ></GroupChat>
         ))}
       </div>

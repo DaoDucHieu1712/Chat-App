@@ -11,10 +11,10 @@ function App() {
     <div>
       <AuthProvider>
         <Routes>
-          <Route path="/sign-in" element={<SignIn></SignIn>}></Route>
           <Route path="/sign-up" element={<SignUp></SignUp>}></Route>
           <Route path="/profile" element={<Profile></Profile>}></Route>
-          <Route path="/" element={<Home></Home>}></Route>
+          <Route path="/box/:boxId" element={<Home></Home>}></Route>
+          <Route path="/" element={<SignIn></SignIn>}></Route>
           <Route path="*" element={<>Oop ! 404 </>}></Route>
         </Routes>
       </AuthProvider>
