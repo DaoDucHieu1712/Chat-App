@@ -211,7 +211,6 @@ const SignUp = () => {
                 getValues={getValues}
                 control={control}
                 name="photoURL"
-                style={{ height: "50px" }}
               ></UploadImage>
             </Field>
             <Field>
@@ -220,7 +219,7 @@ const SignUp = () => {
             <div className="forgot">
               <p className="text-center">
                 You have account ?{" "}
-                <NavLink to="/sign-in" className="text-blue-500 font-semibold">
+                <NavLink to="/" className="text-blue-500 font-semibold">
                   Sign in here
                 </NavLink>
               </p>

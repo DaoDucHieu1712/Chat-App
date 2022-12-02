@@ -14,7 +14,6 @@ import {
 import { db } from "../../firebase-app/firebase-config";
 import ShareKeyBox from "../../components/chat/ShareKeyBox";
 import JoinBox from "../../components/chat/JoinBox";
-import { useParams } from "react-router-dom";
 const ChatRoomStyles = styled.div`
   width: 20%;
   padding: 15px;
