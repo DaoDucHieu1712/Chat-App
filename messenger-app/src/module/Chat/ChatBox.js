@@ -54,6 +54,19 @@ const ChatBoxStyles = styled.div`
       }
     }
   }
+  @media (max-width: 767px) {
+    width: 95%;
+    .chat-box__main {
+      height: 79%;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    width: 55%;
+    .chat-box__main {
+      height: 80%;
+    }
+  }
 `;
 
 const IconAction = [

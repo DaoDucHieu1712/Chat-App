@@ -13,11 +13,12 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../firebase-app/firebase-config";
 import { addDoc, collection } from "firebase/firestore";
 import { toast } from "react-toastify";
+import UploadImage from "../components/uploadImage/UploadImage";
 
 const SignUpPageStyles = styled.div`
   width: 1180px;
-  height: 750px;
-  margin: 100px auto;
+  height: 100vh;
+  margin: 20px auto;
 
   .container {
     width: 100%;
@@ -128,12 +129,14 @@ const SignUp = () => {
     );
     await updateProfile(auth.currentUser, {
       displayName: values.fullname,
+      photoURL: values.photoURL,
     });
     const userRef = collection(db, "users");
     await addDoc(userRef, {
       email: values.email,
       password: values.password,
       name: values.fullname,
+      photoURL: values.photoURL,
     });
 
     toast.success("Register successfully !!!");
@@ -201,6 +204,15 @@ const SignUp = () => {
                   {errors.password.message}
                 </p>
               )}
+            </Field>
+            <Field>
+              <UploadImage
+                setValue={setValue}
+                getValues={getValues}
+                control={control}
+                name="photoURL"
+                style={{ height: "50px" }}
+              ></UploadImage>
             </Field>
             <Field>
               <Button type="submit" buttonContent="SignUp"></Button>

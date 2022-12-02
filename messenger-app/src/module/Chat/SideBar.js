@@ -1,10 +1,12 @@
 import { signOut } from "firebase/auth";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/auth-context";
 import { auth } from "../../firebase-app/firebase-config";
+import ModalBase from "../../portal/ModalBase";
+import Profile from "../user/Profile";
 
 const SideBarStyles = styled.div`
   width: 5%;
@@ -30,6 +32,9 @@ const SideBarStyles = styled.div`
       &:hover {
         background-color: ${(props) => props.theme.gray2};
       }
+      &__rs {
+        display: none;
+      }
     }
     &-user {
       display: flex;
@@ -44,6 +49,16 @@ const SideBarStyles = styled.div`
           border-radius: 50%;
         }
       }
+    }
+  }
+  @media (max-width: 767px) {
+    .sidebar-item__rs {
+      display: block;
+    }
+  }
+  @media (max-width: 1023px) {
+    .sidebar-item__rs {
+      display: block;
     }
   }
 `;
@@ -156,7 +171,9 @@ const listAction = [
 ];
 const SideBar = () => {
   const { userInfo } = useAuth();
+  console.log(userInfo.photoURL);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(false);
   const handleSignOut = () => {
     signOut(auth);
     toast("Sign out successful !!!!!!!!!!!!!!! <3");
@@ -165,6 +182,24 @@ const SideBar = () => {
   return (
     <SideBarStyles>
       <div className="sidebar-list">
+        <div className="sidebar-item__rs p-1 rounded hover:bg-gray-200">
+          <NavLink>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
+              />
+            </svg>
+          </NavLink>
+        </div>
         {listAction.map((item) => (
           <div className="sidebar-item" key={item.title}>
             <NavLink to={item.url}>{item.icon}</NavLink>
@@ -173,9 +208,9 @@ const SideBar = () => {
       </div>
       <div className="sidebar-user">
         <div className="sidebar-user__item">
-          <NavLink to="/profile">
+          <div className="cursor-pointer" onClick={() => setProfile(true)}>
             <img src={userInfo?.photoURL} alt="" />
-          </NavLink>
+          </div>
         </div>
         <div className="sidebar-user__item">
           <div onClick={handleSignOut} className="cursor-pointer">

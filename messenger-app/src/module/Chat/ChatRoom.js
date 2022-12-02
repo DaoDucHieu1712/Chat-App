@@ -12,10 +12,14 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebase-app/firebase-config";
+import ShareKeyBox from "../../components/chat/ShareKeyBox";
+import JoinBox from "../../components/chat/JoinBox";
+import { useParams } from "react-router-dom";
 const ChatRoomStyles = styled.div`
   width: 20%;
   padding: 15px;
   border-right: 1px solid ${(props) => props.theme.gray2};
+  background-color: #fff;
   .chat-room {
     h1 {
       font-size: 28px;
@@ -42,6 +46,12 @@ const ChatRoomStyles = styled.div`
       }
     }
   }
+  @media (max-width: 767px) {
+    display: none;
+  }
+  @media (max-width: 1023px) {
+    display: none;
+  }
 `;
 const boxRef = collection(db, "boxs");
 
@@ -49,6 +59,8 @@ const ChatRoom = () => {
   const { userInfo } = useAuth();
   console.log(userInfo.uid);
   const [openModal, setOpenModal] = useState(false);
+  const [modalShareKey, setModalShareKey] = useState(false);
+  const [modalJoin, setModalJoin] = useState(false);
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
@@ -74,15 +86,17 @@ const ChatRoom = () => {
     return unscribe;
   }, [userInfo]);
 
-  console.log(rooms);
-
   return (
     <ChatRoomStyles>
       <div className="chat-room__header">
         <div className="chat-room__heading flex justify-between items-center">
           <h1 className="text-xl font-semibold">Chat</h1>
           <div className="flex items-center gap-x-2">
-            <span>
+            <span
+              onClick={() => {
+                setModalShareKey(true);
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -109,20 +123,7 @@ const ChatRoom = () => {
                 <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
               </svg>
             </span>
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </span>
+            <span onClick={() => setModalJoin(true)}>join chat</span>
           </div>
         </div>
         <div className="chat-room__search">
@@ -163,6 +164,15 @@ const ChatRoom = () => {
       </div>
       <ModalBase visible={openModal} onClose={() => setOpenModal(false)}>
         <CreateBox setOpenModal={setOpenModal}></CreateBox>
+      </ModalBase>
+      <ModalBase
+        visible={modalShareKey}
+        onClose={() => setModalShareKey(false)}
+      >
+        <ShareKeyBox></ShareKeyBox>
+      </ModalBase>
+      <ModalBase visible={modalJoin} onClose={() => setModalJoin(false)}>
+        <JoinBox setModalJoin={setModalJoin}></JoinBox>
       </ModalBase>
     </ChatRoomStyles>
   );

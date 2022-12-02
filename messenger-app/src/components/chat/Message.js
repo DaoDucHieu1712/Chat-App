@@ -16,14 +16,14 @@ const Message = ({
       <img
         src={photoURL}
         alt="avatar"
-        className="w-[50px] h-[50px] rounded-full"
+        className="w-[40px] h-[40px] rounded-full"
       />
       <div className="flex flex-col gap-1 max-w-[70%]">
         <span className="text-base">
           {displayName}
-          <span className="text-xs text-gray-400">Today at 9:15</span>
+          <span className="text-xs text-gray-400 ml-1">Today at 9:15</span>
         </span>
-        <span className="chat-box__tn max-w-[100%] bg-slate-200 p-2 rounded-lg text-black">
+        <span className="chat-box__tn max-w-[100%] text-sm bg-slate-200 p-2 rounded-lg text-black">
           {message}
         </span>
       </div>
