@@ -7,13 +7,11 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { toast } from "react-toastify";
-import { useWatch } from "react-hook-form";
 import styled from "styled-components";
 import { useEffect } from "react";
 
 const UploadImageStyles = styled.div`
   width: 100%;
-
   .hidden-input {
     border: 0;
     clip: rect(0 0 0 0);
@@ -45,7 +43,7 @@ const UploadImage = ({ setValue, getValues, name, control, ...props }) => {
 
   const handleUploadImage = (file) => {
     const storage = getStorage();
-    const storageRef = ref(storage, "boxs/" + file.name);
+    const storageRef = ref(storage, "images/" + file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(

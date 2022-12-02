@@ -151,7 +151,10 @@ const SignIn = () => {
                 fillRule="evenodd"
               ></path>
             </svg>
-            <h1>Messenger App</h1>
+            <h1 className="text-xl">
+              Messenger App{" "}
+              <span className="text-sm text-green-300">by Dao Duc Hieu</span>
+            </h1>
           </div>
           <form
             action=""

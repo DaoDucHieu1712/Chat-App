@@ -1,9 +1,4 @@
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -16,7 +11,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/auth-context";
-import { useNavigate } from "react-router-dom";
 import UploadImage from "../../components/uploadImage/UploadImage";
 import slugify from "react-slugify";
 import { v4 as uuidv4 } from "uuid";

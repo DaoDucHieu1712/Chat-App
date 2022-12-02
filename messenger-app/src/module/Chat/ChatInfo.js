@@ -18,6 +18,12 @@ const ChatInfoStyles = styled.div`
       }
     }
   }
+  @media (max-width: 767px) {
+    display: none;
+  }
+  @media (max-width: 1023px) {
+    width: 40%;
+  }
 `;
 
 const ChatInfo = () => {
