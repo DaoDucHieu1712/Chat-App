@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import MemberChat from "../../components/chat/MemberChat";
 import IconArrowClose from "../../components/icon/IconArrowClose";
 import IconArrowOpen from "../../components/icon/IconArrowOpen";
+import { useAuth } from "../../contexts/auth-context";
+import { db } from "../../firebase-app/firebase-config";
 
 const ChatInfoStyles = styled.div`
   padding: 15px;
@@ -29,20 +41,31 @@ const ChatInfoStyles = styled.div`
 const ChatInfo = () => {
   const [setting, setSetting] = useState(false);
   const [person, setPerson] = useState(false);
+  const [box, setBox] = useState({});
+  const [user, setUsers] = useState([]);
+  const { boxId } = useParams();
+  const { userInfo } = useAuth();
+  const boxRefSingle = doc(db, "boxs", boxId);
+
+  useEffect(() => {
+    onSnapshot(boxRefSingle, (doc) => {
+      setBox({ id: doc.id, ...doc.data() });
+    });
+  }, [boxId, userInfo]);
 
   return (
     <ChatInfoStyles>
       <div className="chat-info__header w-full flex flex-col items-center justify-center mx-auto">
         <div className="flex items-center justify-center mb-5">
           <img
-            src="https://images.unsplash.com/photo-1669570094762-828f3dfaf675?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
-            alt=""
+            src={box.image_url}
+            alt="box_image"
             className="w-[100px] h-[100px] rounded-full"
           />
         </div>
         <div className="flex items-center justify-center flex-col">
-          <span className="text-lg font-semibold">New Box Chat</span>
-          <span className="text-gray-300">Content Box</span>
+          <span className="text-lg font-semibold">{box.boxName}</span>
+          <span className="text-gray-300">{box.contentBox}</span>
         </div>
       </div>
       <div className="chat-info__icon flex items-center justify-center gap-x-3 my-3">
@@ -146,22 +169,7 @@ const ChatInfo = () => {
             )}
           </div>
           <div className={`${person ? "hidden" : ""}`}>
-            <div className="flex items-center gap-x-2 p-2">
-              <img
-                src="https://images.unsplash.com/photo-1669555514519-261ee068c278?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0Nnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-                alt=""
-                className="w-[40px] h-[40px] rounded-full"
-              />
-              <span>Dao Duc Hieu</span>
-            </div>
-            <div className="flex items-center gap-x-2 p-2">
-              <img
-                src="https://images.unsplash.com/photo-1669555514519-261ee068c278?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0Nnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-                alt=""
-                className="w-[40px] h-[40px] rounded-full"
-              />
-              <span>Dao Duc Hieu</span>
-            </div>
+            <MemberChat></MemberChat>
           </div>
         </div>
       </div>

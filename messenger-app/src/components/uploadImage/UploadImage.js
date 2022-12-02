@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 const UploadImageStyles = styled.div`
   width: 100%;
+
   .hidden-input {
     border: 0;
     clip: rect(0 0 0 0);
@@ -36,7 +37,14 @@ const UploadImageStyles = styled.div`
   }
 `;
 
-const UploadImage = ({ setValue, getValues, name, control, ...props }) => {
+const UploadImage = ({
+  setValue,
+  getValues,
+  name,
+  control,
+  style,
+  ...props
+}) => {
   const [image, setImage] = useState("");
   const [percent, setPercent] = useState(0);
   const [imageName, setImageName] = useState("");
@@ -107,7 +115,7 @@ const UploadImage = ({ setValue, getValues, name, control, ...props }) => {
 
   return (
     <UploadImageStyles>
-      <label className="min-h-[300px] w-full overflow-hidden flex items-center justify-center border border-dashed cursor-pointer rounded-lg">
+      <label className="min-h-[150px] w-full overflow-hidden flex items-center justify-center border border-dashed cursor-pointer rounded-lg">
         <input
           type="file"
           className="hidden-input"
@@ -122,7 +130,7 @@ const UploadImage = ({ setValue, getValues, name, control, ...props }) => {
               className="max-w-[80px] mb-5"
             />
           )}
-          {image && <img src={image} alt="abc" className="w-full h-[300px]" />}
+          {image && <img src={image} alt="abc" className="w-full h-[150px]" />}
           {!image && <p className="font-semibold">Choose photo</p>}
         </div>
       </label>

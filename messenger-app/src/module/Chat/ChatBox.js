@@ -256,7 +256,7 @@ const ChatBox = () => {
             <span className="text-gray-400">{box.contentBox}</span>
           </div>
         </div>
-        <div className="chat-box__action flex items-center gap-x-5">
+        <div className="chat-box__action flex items-center gap-x-3">
           {IconAction.map((item) => (
             <span key={item.icon}>{item.icon}</span>
           ))}
